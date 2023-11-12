@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-express'
-
-const Schema = gql`
+const Schema = `#graphql
     type User {
         email: String!
     }

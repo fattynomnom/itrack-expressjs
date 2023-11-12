@@ -1,32 +1,56 @@
-import { ApolloServer } from 'apollo-server-express'
-import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
+import { ApolloServer } from '@apollo/server'
 import Resolvers from './Resolvers'
 import Schema from './Schema'
+import dotenv from 'dotenv'
 import express from 'express'
-import http from 'http'
+import expressListRoutes from 'express-list-routes'
+import { startStandaloneServer } from '@apollo/server/standalone'
+
+dotenv.config()
 
 const app = express()
 
-// #region express
-app.use(express.json())
-// #endregion
-
 // #region apollo
-const startApolloServer = async (schema: any, resolvers: any) => {
-    const httpServer = http.createServer(app)
+// interface ApolloContext {
+//     user: User
+// }
+
+const startApolloServer = async (
+    schema: typeof Schema,
+    resolvers: typeof Resolvers
+) => {
+    // const server = new ApolloServer<ApolloContext>({
+    //     typeDefs: schema,
+    //     resolvers
+    // })
+    // const { url } = await startStandaloneServer(server, {
+    //     context: async ({ req }) => {
+    //         // Get the user token from the headers.
+    //         const token = req.headers.authorization || ''
+    //         console.log(1, token)
+
+    //         // Try to retrieve a user with the token
+    //         // const user = await getUser(token)
+
+    //         // Add the user to the context
+    //         return { user: { email: 'test@mail.com' } }
+    //     }
+    // })
     const server = new ApolloServer({
         typeDefs: schema,
-        resolvers,
-        //tell Express to attach GraphQL functionality to the server
-        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
-    }) as any
-    await server.start() //start the GraphQL server.
-    server.applyMiddleware({ app })
-    await new Promise<void>(
-        resolve => httpServer.listen({ port: 4000 }, resolve) //run the server on port 4000
-    )
-    console.log(`Server ready at http://localhost:4000${server.graphqlPath}`)
+        resolvers
+    })
+    const { url } = await startStandaloneServer(server)
+    console.log(`Apollo server ready at ${url}`)
 }
 
 startApolloServer(Schema, Resolvers)
+// #endregion
+
+// #region express
+app.use(express.json())
+
+expressListRoutes(app)
+
+console.log(`Server ready at ${process.env.BASE_URL}`)
 // #endregion

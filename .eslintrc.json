@@ -45,6 +45,7 @@
             "error",
             "never"
         ],
-        "padding-line-between-statements": "warn"
+        "padding-line-between-statements": "warn",
+        "@typescript-eslint/no-explicit-any": "warn"
     }
 }
