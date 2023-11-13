@@ -29,3 +29,8 @@ Run `cp .env.example .env`
 1. Seed tables: `npx knex seed:run`
 
 Resource: [Set up postgres + database on MacOS (M1)](https://gist.github.com/phortuin/2fe698b6c741fd84357cec84219c6667)
+
+## Configure Auth0
+
+1. Create new API in Auth0, with the audience set to `http://localhost:4000/graphql`
+1. In the `.env` file, set the `AUTH0_API_AUDIENCE` and `AUTH0_DOMAIN`
