@@ -32,10 +32,14 @@ Run `cp .env.example .env`
 
 Resource: [Set up postgres + database on MacOS (M1)](https://gist.github.com/phortuin/2fe698b6c741fd84357cec84219c6667)
 
-## Configure Auth0
+## Configure Auth0 API
 
 1. Create new API in Auth0, with the audience set to `http://localhost:4000/graphql`
 1. In the `.env` file, set the `AUTH0_API_AUDIENCE` and `AUTH0_DOMAIN`
+
+## Configure Auth0 action flow
+
+Follow the steps in the post titled "Adding user email to Auth0 token claims" [here](https://fattynomnom.github.io)
 
 ## Generate schema types
 

@@ -1,7 +1,7 @@
+import { ApolloContext } from './types.d'
 import { ApolloServer } from '@apollo/server'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import Resolvers from './Resolvers'
-import { User } from './generated/graphql'
 import { auth } from 'express-oauth2-jwt-bearer'
 import cors from 'cors'
 import dotenv from 'dotenv'
@@ -26,10 +26,6 @@ const checkJwt = auth({
 // #endregion
 
 // #region apollo
-interface ApolloContext {
-    user: User
-}
-
 const startApolloServer = async () => {
     const httpServer = http.createServer(app)
     const typeDefs = readFileSync('src/Schema.graphql', { encoding: 'utf-8' })
@@ -50,8 +46,12 @@ const startApolloServer = async () => {
                 console.log(1, token)
 
                 console.log(2, req.auth?.payload)
+                const email =
+                    req.auth?.payload[process.env.AUTH0_EMAIL_CLAIM || '']
 
-                return { user: { email: 'test@mail.com' } }
+                return {
+                    user: { email: email ? (email as string) : undefined }
+                }
             }
         })
     )
