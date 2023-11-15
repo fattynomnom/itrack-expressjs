@@ -1,7 +1,7 @@
 import Knex from './database'
-import { User } from './models'
+import { MutationAddUserArgs, Resolvers } from './generated/graphql'
 
-const Resolvers = {
+const Resolvers: Resolvers = {
     Query: {
         getAllUsers: async () => {
             const rows = await Knex('users').select('*')
@@ -9,7 +9,7 @@ const Resolvers = {
         }
     },
     Mutation: {
-        addUser: async (_: unknown, user: User) => {
+        addUser: async (_: unknown, user: MutationAddUserArgs) => {
             const rows = await Knex('users').insert(user, '*')
             return rows[0]
         }

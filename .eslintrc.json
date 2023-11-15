@@ -3,7 +3,7 @@
         "browser": true,
         "es2021": true
     },
-    "ignorePatterns": ["knexfile.js", "migrations/*", "seeds/*"],
+    "ignorePatterns": ["knexfile.js", "migrations/*", "seeds/*", "src/generated/*"],
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",

@@ -4,6 +4,8 @@ This is a work-in-progress to learn ExpressJs + GraphQL + PostgreSQL + Knex
 
 The purpose is to create an app that can help keep track of the user's monthly expenses and budgeting, see NextJs client [itrack-nextjs](https://github.com/fattynomnom/itrack-nextjs). This app will serve as the backend.
 
+Development document [here](https://fattynomnom.github.io)
+
 # Pre-requisites
 
 ## Install dependencies
@@ -34,3 +36,15 @@ Resource: [Set up postgres + database on MacOS (M1)](https://gist.github.com/pho
 
 1. Create new API in Auth0, with the audience set to `http://localhost:4000/graphql`
 1. In the `.env` file, set the `AUTH0_API_AUDIENCE` and `AUTH0_DOMAIN`
+
+## Generate schema types
+
+`npm run codegen`
+
+## Running locally with hot reload
+
+`npm run dev`
+
+## Compiling and serving production build
+
+`npm start`
