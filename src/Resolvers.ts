@@ -1,6 +1,12 @@
+import { GraphQLError } from 'graphql'
 import Knex from './database'
-import { MutationAddUserArgs, Resolvers } from './generated/graphql'
+import {
+    DefaultCategory,
+    MutationAddUserArgs,
+    Resolvers
+} from './generated/graphql'
 import { ApolloContext } from './types.d'
+import crypto from 'crypto'
 
 const Resolvers: Resolvers = {
     Query: {
@@ -17,12 +23,38 @@ const Resolvers: Resolvers = {
     Mutation: {
         addUser: async (
             _: unknown,
-            user: MutationAddUserArgs,
-            context: ApolloContext
+            { email }: MutationAddUserArgs,
+            { clientId }: ApolloContext
         ) => {
-            console.log(4, context)
-            const rows = await Knex('users').insert(user, '*')
-            return rows[0]
+            // this API should only be called by Auth0
+            if (clientId !== process.env.AUTH0_M2M_CLIENT_ID) {
+                throw new GraphQLError('Access denied', {
+                    extensions: {
+                        code: '403'
+                    }
+                })
+            }
+
+            const defaultCategories =
+                await Knex.select().from<DefaultCategory>('default_categories')
+            const [users, categories] = await Promise.all([
+                Knex('users').insert({ email }, '*'),
+                Knex('categories').insert(
+                    defaultCategories.map(category => ({
+                        uid: crypto.randomUUID(),
+                        name: category.name,
+                        type: category.type,
+                        color: category.color,
+                        user_email: email
+                    })),
+                    '*'
+                )
+            ])
+
+            return {
+                ...users[0],
+                categories
+            }
         }
     }
 }

@@ -1,5 +1,26 @@
+enum CategoryType {
+    expense
+    income
+}
+
 type User {
     email: String!
+    categories: [Category!]!
+}
+
+type Category {
+    uid: ID!
+    name: String!
+    type: CategoryType!
+    color: String!
+    user_email: String!
+}
+
+type DefaultCategory {
+    uid: ID!
+    name: String!
+    type: CategoryType!
+    color: String!
 }
 
 type Query {
@@ -7,5 +28,5 @@ type Query {
 }
 
 type Mutation {
-    addUser(email: String): User
+    addUser(email: String!): User!
 }

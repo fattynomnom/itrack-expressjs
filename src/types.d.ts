@@ -1,5 +1,6 @@
-import { User } from './generated/graphql'
-
 export interface ApolloContext {
-    user: Partial<User>
+    user: {
+        email?: string
+    }
+    clientId?: string
 }

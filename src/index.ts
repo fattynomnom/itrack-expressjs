@@ -48,9 +48,11 @@ const startApolloServer = async () => {
                 console.log(2, req.auth?.payload)
                 const email =
                     req.auth?.payload[process.env.AUTH0_EMAIL_CLAIM || '']
+                const clientId = req.auth?.payload.azp
 
                 return {
-                    user: { email: email ? (email as string) : undefined }
+                    user: { email: email ? (email as string) : undefined },
+                    clientId: clientId ? (clientId as string) : undefined
                 }
             }
         })
