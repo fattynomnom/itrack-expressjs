@@ -5,8 +5,6 @@
 exports.seed = async function (knex) {
     await knex('users').del()
     await knex('users').insert([
-        { email: 'mail1@mail.com' },
-        { email: 'mail2@mail.com' },
-        { email: 'mail3@mail.com' }
+        { email: 'madeleinetee@hotmail.com' },
     ])
 }

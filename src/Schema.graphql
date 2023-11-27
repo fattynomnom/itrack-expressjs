@@ -23,10 +23,42 @@ type DefaultCategory {
     color: String!
 }
 
+type Transaction {
+    uid: ID!
+    name: String!
+    amount: Float!
+    date: String!
+    category_uid: String!
+    user_email: String!
+}
+
+type AddUserMutationResponse {
+    email: String!
+    categories: [Category!]!
+}
+
+type AddTransactionInput {
+    name: String!
+    amount: Float!
+    category_uid: String!
+}
+
+type AddTransactionResponse {
+    uid: ID!
+    name: String!
+    amount: Float!
+    date: String!
+    category_uid: String!
+    user_email: String!
+    category: Category!
+}
+
 type Query {
     getAllUsers: [User]
+    getTransactions: [Transaction]
 }
 
 type Mutation {
-    addUser(email: String!): User!
+    addUser(email: String!): AddUserMutationResponse!
+    addTransaction(transaction: AddTransactionInput!): AddTransactionResponse!
 }
