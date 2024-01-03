@@ -34,20 +34,7 @@ const Resolvers: Resolvers = {
         }
     },
     Mutation: {
-        addUser: async (
-            _: unknown,
-            { email }: MutationAddUserArgs,
-            { clientId }: ApolloContext
-        ) => {
-            // this API should only be called by Auth0
-            if (clientId !== process.env.AUTH0_M2M_CLIENT_ID) {
-                throw new GraphQLError('Access denied', {
-                    extensions: {
-                        code: '403'
-                    }
-                })
-            }
-
+        addUser: async (_: unknown, { email }: MutationAddUserArgs) => {
             const defaultCategories =
                 await Knex.select().from<DefaultCategory>('default_categories')
             const [users, categories] = await Promise.all([
