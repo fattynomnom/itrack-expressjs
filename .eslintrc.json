@@ -17,9 +17,9 @@
     },
     "plugins": [
         "@typescript-eslint",
-        "prettier",
         "import",
-        "@stylistic/ts"
+        "@stylistic/ts",
+        "prettier"
     ],
     "settings": {
         "import/resolver": {
@@ -29,10 +29,6 @@
         }
     },
     "rules": {
-        "indent": [
-            "error",
-            4
-        ],
         "linebreak-style": [
             "error",
             "unix"

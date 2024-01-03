@@ -37,7 +37,7 @@ type AddUserMutationResponse {
     categories: [Category!]!
 }
 
-type AddTransactionInput {
+input AddTransactionInput {
     name: String!
     amount: Float!
     category_uid: String!

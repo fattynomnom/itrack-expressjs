@@ -1,13 +1,16 @@
 import { ApolloContext } from './types.d'
 import { ApolloServer } from '@apollo/server'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
+import Middlewares from './middleware'
 import Resolvers from './Resolvers'
+import { applyMiddleware } from 'graphql-middleware'
 import { auth } from 'express-oauth2-jwt-bearer'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import { expressMiddleware } from '@apollo/server/express4'
 import http from 'http'
+import { makeExecutableSchema } from '@graphql-tools/schema'
 import { readFileSync } from 'fs'
 
 dotenv.config()
@@ -29,9 +32,10 @@ const checkJwt = auth({
 const startApolloServer = async () => {
     const httpServer = http.createServer(app)
     const typeDefs = readFileSync('src/Schema.graphql', { encoding: 'utf-8' })
+    const schema = makeExecutableSchema({ typeDefs, resolvers: Resolvers })
+    const schemaWithMiddleware = applyMiddleware(schema, Middlewares)
     const server = new ApolloServer<ApolloContext>({
-        typeDefs,
-        resolvers: Resolvers,
+        schema: schemaWithMiddleware,
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
     })
     await server.start()

@@ -26,14 +26,6 @@ const Resolvers: Resolvers = {
             _args: unknown,
             { user }: ApolloContext
         ) => {
-            if (!user.email) {
-                throw new GraphQLError('Unauthorized', {
-                    extensions: {
-                        code: '401'
-                    }
-                })
-            }
-
             const rows = await Knex('transactions').select('*').where({
                 user_email: user.email
             })
@@ -82,14 +74,6 @@ const Resolvers: Resolvers = {
             { transaction }: MutationAddTransactionArgs,
             { user }: ApolloContext
         ) => {
-            if (!user.email) {
-                throw new GraphQLError('Unauthorized', {
-                    extensions: {
-                        code: '401'
-                    }
-                })
-            }
-
             const categories = await Knex.select()
                 .from<Category>('categories')
                 .where({ uid: transaction.category_uid })
