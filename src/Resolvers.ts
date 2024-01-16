@@ -7,8 +7,8 @@ import {
     MutationAddUserArgs,
     Resolvers
 } from './generated/graphql'
-import { ApolloContext } from './types.d'
 import crypto from 'crypto'
+import { ApolloContext } from './middlewares/setApolloContext'
 
 const Resolvers: Resolvers = {
     Query: {
