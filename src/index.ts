@@ -1,8 +1,8 @@
 import { ApolloContext, setApolloContext } from './middlewares/setApolloContext'
 
+import ApolloMiddleware from './middlewares/apolloMiddleware'
 import { ApolloServer } from '@apollo/server'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
-import Middlewares from './middleware'
 import Resolvers from './Resolvers'
 import { applyMiddleware } from 'graphql-middleware'
 import { checkJwt } from './middlewares/checkJwt'
@@ -19,7 +19,7 @@ const app = express()
 const httpServer = http.createServer(app)
 const typeDefs = readFileSync('src/Schema.graphql', { encoding: 'utf-8' })
 const schema = makeExecutableSchema({ typeDefs, resolvers: Resolvers })
-const schemaWithMiddleware = applyMiddleware(schema, Middlewares)
+const schemaWithMiddleware = applyMiddleware(schema, ApolloMiddleware)
 const server = new ApolloServer<ApolloContext>({
     schema: schemaWithMiddleware,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
