@@ -3,7 +3,7 @@ import { ApolloContext, setApolloContext } from './middlewares/setApolloContext'
 import ApolloMiddleware from './middlewares/apolloMiddleware'
 import { ApolloServer } from '@apollo/server'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
-import Resolvers from './Resolvers'
+import Resolvers from './resolvers'
 import { applyMiddleware } from 'graphql-middleware'
 import { checkJwt } from './middlewares/checkJwt'
 import cors from 'cors'
@@ -11,13 +11,12 @@ import dotenv from 'dotenv'
 import express from 'express'
 import http from 'http'
 import { makeExecutableSchema } from '@graphql-tools/schema'
-import { readFileSync } from 'fs'
+import typeDefs from './typeDefs'
 
 dotenv.config()
 
 const app = express()
 const httpServer = http.createServer(app)
-const typeDefs = readFileSync('src/Schema.graphql', { encoding: 'utf-8' })
 const schema = makeExecutableSchema({ typeDefs, resolvers: Resolvers })
 const schemaWithMiddleware = applyMiddleware(schema, ApolloMiddleware)
 const server = new ApolloServer<ApolloContext>({

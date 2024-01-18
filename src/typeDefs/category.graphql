@@ -1,0 +1,19 @@
+enum CategoryType {
+    expense
+    income
+}
+
+type Category {
+    uid: ID!
+    name: String!
+    type: CategoryType!
+    color: String!
+    user_email: String!
+}
+
+type DefaultCategory {
+    uid: ID!
+    name: String!
+    type: CategoryType!
+    color: String!
+}

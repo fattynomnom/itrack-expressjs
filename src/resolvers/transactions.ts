@@ -1,26 +1,23 @@
-import { GraphQLError } from 'graphql'
-import Knex from './database'
 import {
     Category,
-    DefaultCategory,
     MutationAddTransactionArgs,
-    MutationAddUserArgs,
+    MutationResolvers,
+    QueryResolvers,
     Resolvers
-} from './generated/graphql'
-import crypto from 'crypto'
-import { ApolloContext } from './middlewares/setApolloContext'
+} from '../generated/graphql'
 
-const Resolvers: Resolvers = {
+import { ApolloContext } from '../middlewares/setApolloContext'
+import { GraphQLError } from 'graphql'
+import Knex from '../database'
+import crypto from 'crypto'
+
+interface TransactionResolvers {
+    Query: Pick<QueryResolvers<ApolloContext>, 'getTransactions'>
+    Mutation: Pick<MutationResolvers<ApolloContext>, 'addTransaction'>
+}
+
+const Resolvers: TransactionResolvers = {
     Query: {
-        getAllUsers: async (
-            _parent: unknown,
-            _args: unknown,
-            context: ApolloContext
-        ) => {
-            console.log(3, context)
-            const rows = await Knex('users').select('*')
-            return rows
-        },
         getTransactions: async (
             _parent: unknown,
             _args: unknown,
@@ -34,28 +31,6 @@ const Resolvers: Resolvers = {
         }
     },
     Mutation: {
-        addUser: async (_: unknown, { email }: MutationAddUserArgs) => {
-            const defaultCategories =
-                await Knex.select().from<DefaultCategory>('default_categories')
-            const [users, categories] = await Promise.all([
-                Knex('users').insert({ email }, '*'),
-                Knex('categories').insert(
-                    defaultCategories.map(category => ({
-                        uid: crypto.randomUUID(),
-                        name: category.name,
-                        type: category.type,
-                        color: category.color,
-                        user_email: email
-                    })),
-                    '*'
-                )
-            ])
-
-            return {
-                ...users[0],
-                categories
-            }
-        },
         addTransaction: async (
             _: unknown,
             { transaction }: MutationAddTransactionArgs,

@@ -1,0 +1,17 @@
+type User {
+    email: String!
+    categories: [Category!]!
+}
+
+type AddUserMutationResponse {
+    email: String!
+    categories: [Category!]!
+}
+
+type Query {
+    getAllUsers: [User]
+}
+
+type Mutation {
+    addUser(email: String!): AddUserMutationResponse!
+}
